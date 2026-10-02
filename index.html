@@ -1144,7 +1144,7 @@ document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{if(sel)return c
 $('#frm').addEventListener('focusin',()=>fly(RG.contact,.80));
 let tx=0,ty=0,cx=0,cy=0,act=0;addEventListener('pointermove',e=>{if(e.pointerType=='mouse'){act=1;tx=e.clientX/innerWidth*2-1;ty=e.clientY/innerHeight*2-1}},{passive:true});
 {const bgE=$('#bg'),fgE=$('#fg'),prE=$('#par');let lx=1e9,ly=1e9;
-(function lp(t){if(!RM&&!FCM){if(!act){tx=Math.sin(t/5200)*.5;ty=Math.cos(t/6900)*.3}cx+=(tx-cx)*.05;cy+=(ty-cy)*.05;
+(function lp(t){if(!RM&&!FCM){if(!act){if(QL.on()){tx=0;ty=0}else{tx=Math.sin(t/5200)*.5;ty=Math.cos(t/6900)*.3}}cx+=(tx-cx)*.05;cy+=(ty-cy)*.05;
  /* only touch the DOM when the value actually moved; vars are scoped to the two elements that use them */
  if(Math.abs(cx-lx)>5e-5||Math.abs(cy-ly)>5e-5){lx=cx;ly=cy;const a=cx.toFixed(3),b=cy.toFixed(3);bgE.style.setProperty('--mx',a);bgE.style.setProperty('--my',b);fgE.style.setProperty('--mx',a);fgE.style.setProperty('--my',b);const pt=`translate(${-cx*10}px,${-cy*7}px)`;if(prE){prE.style.transform=pt;stp.style.transform=pt}}}requestAnimationFrame(lp)})(0)}
 /* ---- cases ---- */
@@ -1873,7 +1873,9 @@ fit();cam={x:800,y:500,s:HS()*1.32};put();place();
 
 /* fluorescent flicker per bay, walk, archive dolly; everything advances only while MOTION is ON */
 const FK=B.map((_,i)=>({n:R(1500,8000)+i*700,u:0,k:0,v:1}));FK[4].n=900;
-function tick(t){if(done)return;requestAnimationFrame(tick);if(QL.skip(t))return;const dt=Math.min(50,t-lt||16);lt=t;if(done||document.hidden||!KS.mot)return;
+let tp=0;const tfz=()=>QL.on()&&!introEntered;/* LOW: corridor is frozen behind the notebook; tick() resumes in begin() */
+QL.h.push(()=>{if(tp&&!tfz()){tp=0;lt=0;requestAnimationFrame(tick)}});
+function tick(t){if(done)return;if(tfz()){tp=1;return}requestAnimationFrame(tick);if(QL.skip(t))return;const dt=Math.min(50,t-lt||16);lt=t;if(done||document.hidden||!KS.mot)return;
  T+=dt;px+=(mx-px)*.04;py+=(my-py)*.04;
  if(BO<2)B.forEach((b,i)=>{const f=FK[i];if(!f.u&&(f.n-=dt)<=0){f.u=R(180,720);f.k=0;f.n=R(4500,15000)}
   if(f.u>0){f.u-=dt;if((f.k-=dt)<=0){f.k=R(25,95);f.v=f.v>.8?R(.12,.55):1;if(f.v<.7){if(i<4)burst(2600,2,.03,.05,.003);if(BO===1)SFX.flkHit()}}if(f.u<=0){f.u=0;f.v=1}b.forEach(e=>e.style.opacity=f.v)}});
@@ -1891,7 +1893,7 @@ function rat(){const f=FLR[3+(Math.random()*3|0)],e=document.createElement('u'),
  e.animate([{transform:tf(a)},...(p?[{transform:tf(m),offset:.45},{transform:tf(m),offset:.6}]:[]),{transform:tf(z)}],{duration:R(1700,2500),easing:'cubic-bezier(.3,.1,.6,.9)'}).onfinish=()=>e.remove();
  for(let k=0;k<7;k++)later(()=>burst(4600,4,.015,.035),k*120)}
 function thFx(){FLS.animate([{opacity:0},{opacity:.3},{opacity:.05},{opacity:.18},{opacity:0}],{duration:1100});setTimeout(()=>{try{thunder()}catch(e){}},R(400,1500))}
-(function evt(){setTimeout(evt,R(3500,9000));if(!KS.mot||done||document.hidden||!SFX.drip)return;const r=Math.random();
+(function evt(){setTimeout(evt,R(3500,9000));if(!KS.mot||done||document.hidden||!SFX.drip||tfz())return;const r=Math.random();
  if(r<.4){PD[Math.random()*PD.length|0].firstChild.animate([{transform:'scale(.15)',opacity:.8},{transform:'scale(1.4)',opacity:0}],{duration:1500,easing:'ease-out'});SFX.drip()}
  else if(r<.62)rat();else if(r<.72)SFX.pipe();else if(r<.8)thFx()})();
 
@@ -1914,7 +1916,7 @@ async function cap(m){const c=$('#kcap'),b=$('#kc2'),id=KS.lang==='id',d=new Dat
  try{m&&SFX.ding()}catch(e){}await wait(2400);c.classList.remove('on')}
 
 /* open the case file: notebook drops away, focus racks, camera walks through the door into the archive */
-function begin(){if(introEntered)return;introEntered=true;const m=!!KS.mot;
+function begin(){if(introEntered)return;introEntered=true;if(tp){tp=0;lt=0;requestAnimationFrame(tick)}const m=!!KS.mot;
  setSound(!!KS.snd);ambience();setBgm(!!KS.bgm);
  $('#bgmctl').textContent=tr(bgmOn?'[ BGM ON ]':'[ BGM OFF ]');$('#bgmctl').setAttribute('aria-pressed',bgmOn);
  document.body.classList.remove('pre');document.activeElement&&document.activeElement.blur&&document.activeElement.blur();
@@ -3160,6 +3162,13 @@ html.lq .kt,html.lq .abk-t,html.lq .kstage,html.lq #brn,html.lq .lamfx .gA,html.
 html.lq .lamfx .mote,html.lq #fcdust{display:none}
 html.lq .lamfx{mix-blend-mode:normal}
 html.lq #cw,html.lq #cw *,html.lq #cw *::before,html.lq #cw *::after{box-shadow:none!important}
+/* INTRO (LOW): flat corridor surfaces (no SVG noise texture), frozen behind the notebook until OPEN CASE FILE (.go) */
+html.lq #cw .fl{background:linear-gradient(#34383a,#1e2124)}
+html.lq #cw .ce{background:repeating-linear-gradient(90deg,#3b3e3d 0 59px,#222 59px 60px)}
+html.lq #cw .wl{background:linear-gradient(#6b6f63 0 40%,#2a1f1a 40% 41.5%,#4b584d 41.5% 93%,#101214 93%)}
+html.lq #cw .ew.lt{background-size:100% 280px;background-repeat:no-repeat}
+html.lq #cw .dr{background:linear-gradient(#3a2e22,#2a2019)}
+html.lq #intro:not(.go) #cs,html.lq #intro:not(.go) #cs *,html.lq #intro:not(.go) #cs *::before,html.lq #intro:not(.go) #cs *::after{animation-play-state:paused!important}
 </style>
 <script id="lq-run">
 (function(){var d=document.documentElement;
