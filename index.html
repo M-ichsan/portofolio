@@ -1,5 +1,37 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><title>M Ichsan // CASE ARCHIVE</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>
+/* ===== MOBILE: paksa landscape + tampilan SAMA PERSIS seperti desktop =====
+   HP landscape dirender di lebar 1280px (lalu diperkecil otomatis oleh browser),
+   jadi semua aturan layout desktop berlaku. Kalau portrait -> tampil overlay "putar HP". */
+(function(){
+  var d=document.documentElement,m=document.querySelector('meta[name=viewport]'),DW=1280;
+  function phone(){
+    var touch=(window.matchMedia&&matchMedia('(pointer:coarse)').matches)||navigator.maxTouchPoints>0;
+    return touch&&Math.min(screen.width,screen.height)<820;
+  }
+  function apply(){
+    if(!phone())return;
+    var port=matchMedia('(orientation:portrait)').matches;
+    var want=port?'width=device-width,initial-scale=1,viewport-fit=cover':'width='+DW+',user-scalable=no,viewport-fit=cover';
+    if(m.getAttribute('content')!==want)m.setAttribute('content',want);
+    d.classList.toggle('rotlock',port);
+  }
+  apply();
+  addEventListener('resize',apply);
+  addEventListener('orientationchange',function(){setTimeout(apply,120)});
+})();
+</script>
+<style>
+#rotlock{display:none}
+html.rotlock,html.rotlock body{overflow:hidden!important;height:100%}
+html.rotlock #rotlock{display:flex;position:fixed;inset:0;z-index:2147483647;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:28px;text-align:center;color:#e9dfc4;font-family:'Special Elite','Courier New',monospace;background:radial-gradient(ellipse at 50% 40%,#2a2218 0%,#0b0907 75%)}
+#rotlock svg{width:96px;height:96px;animation:rotphone 2.6s ease-in-out infinite;transform-origin:50% 50%}
+@keyframes rotphone{0%,15%{transform:rotate(0)}55%,85%{transform:rotate(-90deg)}100%{transform:rotate(0)}}
+#rotlock h1{margin:0;font-size:22px;letter-spacing:.14em;color:#d8b25a}
+#rotlock p{margin:0;font-size:13px;line-height:1.55;max-width:300px;opacity:.85}
+#rotlock small{font-size:11px;opacity:.55;letter-spacing:.06em}
+</style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Caveat:wght@500&family=Reenie+Beanie&family=Space+Grotesk:wght@400;700&family=Playfair+Display:ital,wght@0,700;1,700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -898,7 +930,7 @@ a.acct:active{translate:0 1px;filter:drop-shadow(1px 2px 1px rgba(0,0,0,.4))}
 .lp .shot:after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.28),transparent 42%)}
 .lp.cable svg{display:block;overflow:visible}
 @media(prefers-reduced-motion:reduce){.lp,.lp .sheet{transition:none}}
-</style></head><body class="pre">
+</style></head><body class="pre"><div id="rotlock" role="alert"><svg viewBox="0 0 64 64" fill="none" stroke="#d8b25a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="19" y="6" width="26" height="52" rx="5"/><line x1="28" y1="51" x2="36" y2="51"/></svg><h1>PUTAR HP KAMU<br>ROTATE YOUR PHONE</h1><p>Case room ini hanya bisa dibuka dalam mode landscape.<br>The case room only opens in landscape.</p><small>AUTO-ROTATE ON / PUTAR OTOMATIS AKTIF</small></div>
 <div id="bg"></div>
 <div id="cam"><div id="par"><div id="world">
  <div class="board"></div><div class="shelf"><i style="left:14px;width:60px;height:70px"></i><i style="left:90px;width:36px;height:44px"></i><i style="left:250px;width:90px;height:56px"></i></div>
