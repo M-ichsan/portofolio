@@ -256,7 +256,7 @@ body.clown #nav,body.clown #snd,body.clown #bgmctl,body.clown #langctl,body.clow
 .kul path{fill:none;stroke:#3c3d48;stroke-width:2;stroke-linecap:round;stroke-dasharray:1;animation:kdraw .5s ease-out 2.3s backwards;opacity:.7}
 .krows{list-style:none;margin:.5em 0 0;padding:0}
 .krow{display:flex;align-items:baseline;width:100%;padding:.22em 0;font:400 1.95em/1.12 var(--hand);color:#262838;animation:kwipe .5s ease backwards}
-.krows li:nth-child(1) .krow{animation-delay:2.35s}.krows li:nth-child(2) .krow{animation-delay:2.5s}.krows li:nth-child(3) .krow{animation-delay:2.65s}.krows li:nth-child(4) .krow{animation-delay:2.8s}
+.krows li:nth-child(1) .krow{animation-delay:2.35s}.krows li:nth-child(2) .krow{animation-delay:2.5s}.krows li:nth-child(3) .krow{animation-delay:2.65s}.krows li:nth-child(4) .krow{animation-delay:2.8s}.krows li:nth-child(5) .krow{animation-delay:2.95s}
 @keyframes kwipe{from{clip-path:inset(-20% 100% -20% 0);opacity:.2}}
 .krow .lb{white-space:nowrap;letter-spacing:.02em;transform-origin:0 100%;transition:transform .2s}
 .krow:hover .lb,.krow:focus-visible .lb{text-decoration:underline wavy rgba(163,23,26,.6);text-underline-offset:.16em;transform:rotate(-1deg)}
@@ -992,7 +992,7 @@ a.acct:active{translate:0 1px;filter:drop-shadow(1px 2px 1px rgba(0,0,0,.4))}
  <div class="pcl"></div><div class="rl"></div><div class="kb"></div>
  <section class="paper" id="about" style="left:250px;top:725px;width:360px;--r:-1.2deg" aria-label="About">
   <h5>SUBJECT: M Ichsan</h5>
-  <figure class="mug tp"><img id="me" alt="Foto M Ichsan" src="assets/ichsan.png"><figcaption>M Ichsan</figcaption></figure>
+  <figure class="mug tp"><img id="me" decoding="async" alt="Foto M Ichsan" src="assets/ichsan.png"><figcaption>M Ichsan</figcaption></figure>
   <dl style="margin:0"><dt>ROLE</dt><dd>designer / developer / creative / writer</dd><dt>CURRENT STATUS</dt><dd>EVOLVING</dd><dt>INTERESTS</dt><dd>design, code, AI, interaction, visual systems, writing, storytelling, world-building, visual identity, creative experimentation</dd><dt>TOOLS</dt><dd>vanilla JavaScript, HTML5 Canvas, CSS, Node.js, pencil</dd><dt>ALSO ON FILE</dt><dd>an original character universe: Fallen Genesis</dd></dl>
   <div class="abk" id="abk">
    <span class="abk-k" style="left:196px"><a class="abk-t" data-k="ig" href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram" style="--l:22px;--r:-2deg;--a:3deg;--s:3.6s;--dl:-0.5s"><em><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="3" width="26" height="26" rx="8" fill="url(#abIg)"/><circle cx="16" cy="16" r="6" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="23.2" cy="8.8" r="1.8" fill="#fff"/></svg></em><u>Instagram</u></a><i class="abk-hole"></i><i class="abk-ring"></i></span>
@@ -1046,6 +1046,7 @@ a.acct:active{translate:0 1px;filter:drop-shadow(1px 2px 1px rgba(0,0,0,.4))}
         <li><button type="button" class="krow" data-k="bgm"><span class="lb">BGM:</span><span class="vl"></span></button></li>
         <li><button type="button" class="krow" data-k="mot"><span class="lb">MOTION:</span><span class="vl"></span></button></li>
         <li><button type="button" class="krow" data-k="lang"><span class="lb">LANGUAGE:</span><span class="vl"></span></button></li>
+        <li><button type="button" class="krow" data-k="qual"><span class="lb" data-i="ql">QUALITY:</span><span class="vl"></span></button></li>
       </ul>
       <div class="khint" id="khint"><svg viewBox="0 0 28 20" aria-hidden="true"><path d="M26 16C18 16 8 14 4 5M4 5l1 8M4 5l8 2"/></svg><span data-i="hint"></span></div>
       <button type="button" id="kopen"><span class="kst">OPEN CASE FILE</span></button>
@@ -1057,6 +1058,20 @@ a.acct:active{translate:0 1px;filter:drop-shadow(1px 2px 1px rgba(0,0,0,.4))}
 </div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="crtwarp" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB"><feTurbulence id="crtT" type="fractalNoise" baseFrequency="0.0008 0.07" numOctaves="1" seed="3" result="n"/><feColorMatrix in="n" type="matrix" values="1 0 0 0 0  0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 1" result="m"/><feDisplacementMap id="crtD" in="SourceGraphic" in2="m" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
 <audio id="bgm" src="assets/bgm.mp3" preload="auto" loop></audio>
+<script id="lq-boot">
+/* ===== QUALITY: auto-LOW on phones (coarse pointer + small screen) or sustained FPS<40; manual AUTO/LOW/HIGH in session notes ===== */
+(function(){var d=document.documentElement,H=[];
+function ph(){return((window.matchMedia&&matchMedia('(pointer:coarse)').matches)||navigator.maxTouchPoints>0)&&Math.min(screen.width,screen.height)<820}
+var P='auto';try{P=localStorage.getItem('qual')||'auto'}catch(e){}
+var Q=window.QL={pref:P,fps:0,phone:ph(),h:H,last:0,
+ on:function(){return Q.pref==='low'||(Q.pref==='auto'&&(Q.phone||!!Q.fps))},
+ apply:function(){var v=Q.on();if(d.classList.contains('lq')===v)return;d.classList.toggle('lq',v);H.forEach(function(f){try{f(v)}catch(e){}})},
+ set:function(p){Q.pref=p;Q.fps=0;try{localStorage.setItem('qual',p)}catch(e){}Q.apply()},
+ cycle:function(){Q.set(Q.pref==='auto'?'low':Q.pref==='low'?'high':'auto')},
+ skip:function(t){if(!Q.on())return false;if(t-Q.last<30)return true;Q.last=t;return false}};
+d.classList.toggle('lq',Q.on());
+})();
+</script>
 <script>
 const $=s=>document.querySelector(s),R=(a,b)=>a+Math.random()*(b-a),root=document.documentElement;let RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
 /* ---- EDIT ME: case content is draft copy ---- */
@@ -1106,7 +1121,7 @@ function mk(o){const e=document.createElement('div');e.className='it '+o.c;e.tab
  e.onkeydown=v=>{if(v.key=='Enter'||v.key==' '){v.preventDefault();it.act&&it.act(it)}};return it}
 CASES.forEach(c=>mk({id:c.id,c:'case '+c.k,x:c.x,y:c.y,aria:'Open case '+c.n+' '+c.t,s:'--g:'+c.g,h:`<p class=k>CASE ${c.n}</p><div class=ph></div><h3>${c.t}</h3><small>${c.st}</small>`,act:()=>openCase(c)}));
 NODES.forEach(([id,l,n,x,y,st],i)=>mk({id,x,y,c:'nd '+(i%3?'idx':'stk'),aria:l,h:`<b>${l}</b><em>${n}</em>`+(st.length>1?`<span class="stamp2${st=='ABANDONED'?' g':''}">${st}</span>`:''),act:()=>SFX.click()}));
-const cb=$('#cb').getContext('2d'),cf=$('#cf').getContext('2d');cb.scale(2,2);cf.scale(2,2);
+const cb=$('#cb').getContext('2d'),cf=$('#cf').getContext('2d');function sizeCv(){const q=QL.on()?1:2;[[$('#cb'),cb],[$('#cf'),cf]].forEach(([c,x])=>{c.width=1600*q;c.height=1000*q;x.setTransform(q,0,0,q,0,0)})}sizeCv();QL.h.push(()=>{sizeCv();draw()});
 const pin=i=>[i.x+i.w/2+i.pd,i.y+11];
 function draw(){cb.clearRect(0,0,1600,1000);cf.clearRect(0,0,1600,1000);
  LINKS.forEach(([a,b,f,k])=>{const c=f?cf:cb,A=pin(items[a]),B=Array.isArray(b)?b:pin(items[b]),d=Math.hypot(B[0]-A[0],B[1]-A[1]),mx=(A[0]+B[0])/2+k*16,my=(A[1]+B[1])/2+d*.11+Math.abs(k)*8;
@@ -1124,7 +1139,7 @@ function fly(r,pad=.92,d,cb){cr=[r,pad];const[x,y,w,h]=r,to={x:x+w/2,y:y+h/2,s:M
  const a={...cam},dur=RM?600:(d||2300),arc=RM?0:Math.min(.2,Math.hypot(to.x-a.x,to.y-a.y)/1600*.4),t0=performance.now();document.body.classList.add('mv');if(!RM)SFX.whoosh(dur);
  (function st(n){const p=Math.min(1,(n-t0)/dur),e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;cam={x:a.x+(to.x-a.x)*e,y:a.y+(to.y-a.y)*e,s:(a.s+(to.s-a.s)*e)*(1-arc*Math.sin(Math.PI*e))};put();if(p<1)raf=requestAnimationFrame(st);else{cam=to;put();document.body.classList.remove('mv');cb&&cb()}})(t0)}
 const home=()=>innerWidth/innerHeight<1?RG.cases:RG.all;
-addEventListener('resize',()=>fly(cr[0],cr[1],0));$('#cam').addEventListener('scroll',e=>{e.target.scrollTop=e.target.scrollLeft=0});
+{let rz=0;addEventListener('resize',()=>{if(rz)return;rz=requestAnimationFrame(()=>{rz=0;fly(cr[0],cr[1],0)})})}$('#cam').addEventListener('scroll',e=>{e.target.scrollTop=e.target.scrollLeft=0});
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{if(sel)return closeCase();SFX.tick();const g=b.dataset.go;if(g==='about')return fly(RG.about,.78);if(g==='contact')return fly(RG.contact,.80);fly(g=='all'?home():RG[g])});
 $('#frm').addEventListener('focusin',()=>fly(RG.contact,.80));
 let tx=0,ty=0,cx=0,cy=0,act=0;addEventListener('pointermove',e=>{if(e.pointerType=='mouse'){act=1;tx=e.clientX/innerWidth*2-1;ty=e.clientY/innerHeight*2-1}},{passive:true});
@@ -1789,14 +1804,16 @@ IN.classList.toggle('still',!KS.mot);
 const KT={
   hint:{id:'ketuk catatan untuk menulis ulang',en:'tap a note to rewrite it'},
   note:{id:'hujan. lorong. pintu.',en:'rain. corridor. door.'},
-  fin:{id:'BERKAS DIBUKA',en:'CASE FILE OPENED'}
+  fin:{id:'BERKAS DIBUKA',en:'CASE FILE OPENED'},
+  ql:{id:'KUALITAS:',en:'QUALITY:'}
 };
 function introText(){
   document.querySelectorAll('#intro [data-i]').forEach(e=>e.textContent=KT[e.dataset.i][KS.lang]);
   $('#kopen').setAttribute('aria-label',KS.lang==='id'?'Buka berkas kasus':'Open case file');
 }
-const valOf=k=>k==='lang'?(KS.lang==='id'?'INDONESIA':'ENGLISH'):(KS[k]?'ON':'OFF');
-const typeOf=k=>k==='lang'?'lang':(KS[k]?'on':'off');
+const QV={auto:['AUTO','OTOMATIS'],high:['HIGH','TINGGI'],low:['LOW','RENDAH']};
+const valOf=k=>k==='qual'?QV[QL.pref][KS.lang==='id'?1:0]:k==='lang'?(KS.lang==='id'?'INDONESIA':'ENGLISH'):(KS[k]?'ON':'OFF');
+const typeOf=k=>(k==='lang'||k==='qual')?'lang':(KS[k]?'on':'off');
 const SK='<svg class="sk" viewBox="0 0 100 24" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M-2 15C18 4 34 21 52 10S88 6 102 14"/><path pathLength="1" d="M0 6C22 19 46 4 70 18S96 12 101 9"/></svg>';
 function paint(k,prev,fresh){
   const row=document.querySelector('.krow[data-k='+k+']'),vl=row.querySelector('.vl');
@@ -1804,17 +1821,17 @@ function paint(k,prev,fresh){
   vl.innerHTML=(prev?'<span class="old">'+prev+SK+'</span>':'')+'<span class="kval'+(fresh?' fresh':'')+'" data-t="'+typeOf(k)+'" style="--cr:'+(Math.random()*3-1.6).toFixed(1)+'deg">'+now+'</span>';
   row.setAttribute('aria-label',row.querySelector('.lb').textContent.replace(':','')+': '+now);
 }
-['snd','bgm','mot','lang'].forEach(k=>paint(k,null,false));
+['snd','bgm','mot','lang','qual'].forEach(k=>paint(k,null,false));
 introText();
 
 function flip(k){
   const prev=valOf(k);
-  if(k==='lang')KS.lang=KS.lang==='id'?'en':'id';else KS[k]^=1;
+  if(k==='lang')KS.lang=KS.lang==='id'?'en':'id';else if(k==='qual')QL.cycle();else KS[k]^=1;
   if(k==='snd'){setSound(!!KS.snd);ambience()}
   if(k==='bgm'){setBgm(!!KS.bgm)}
   if(k==='mot')setMot();
   if(k==='lang'){setLang(KS.lang);introText()}
-  paint(k,prev,true);
+  paint(k,prev,true);if(k==='lang')paint('qual',null,false);
   $('#khint').classList.add('gone');
   try{on&&SFX.pencil()}catch(e){}
 }
@@ -1851,12 +1868,12 @@ const DP=pl('dp',100,215,`translate3d(-50px,-65px,${ZE+2}px)`,ch('dq','left:9px;
 function place(){const w=walk?1:0,b=Math.sin(T*.0115)*(w?2.6:.5)+Math.sin(T*.0013)*.6,x=Math.sin(T*.0057)*(w?2:.4)+px*10;
  CW.style.transform=`translate3d(${-x}px,${b+py*5}px,${s}px) rotateZ(${Math.sin(T*.0009)*.2+Math.sin(T*.0052)*(w?.15:.03)}deg)`}
 function fit(){const k=Math.max(innerWidth/1600,innerHeight/900);CS.style.setProperty('--k',k);IN.style.setProperty('--vy',(innerHeight/2-.14*900*k).toFixed(1)+'px')}
-addEventListener('resize',fit);addEventListener('pointermove',e=>{mx=e.clientX/innerWidth*2-1;my=e.clientY/innerHeight*2-1});
+addEventListener('resize',fit);addEventListener('pointermove',e=>{mx=e.clientX/innerWidth*2-1;my=e.clientY/innerHeight*2-1},{passive:true});
 fit();cam={x:800,y:500,s:HS()*1.32};put();place();
 
 /* fluorescent flicker per bay, walk, archive dolly; everything advances only while MOTION is ON */
 const FK=B.map((_,i)=>({n:R(1500,8000)+i*700,u:0,k:0,v:1}));FK[4].n=900;
-function tick(t){if(done)return;requestAnimationFrame(tick);const dt=Math.min(50,t-lt||16);lt=t;if(done||document.hidden||!KS.mot)return;
+function tick(t){if(done)return;requestAnimationFrame(tick);if(QL.skip(t))return;const dt=Math.min(50,t-lt||16);lt=t;if(done||document.hidden||!KS.mot)return;
  T+=dt;px+=(mx-px)*.04;py+=(my-py)*.04;
  if(BO<2)B.forEach((b,i)=>{const f=FK[i];if(!f.u&&(f.n-=dt)<=0){f.u=R(180,720);f.k=0;f.n=R(4500,15000)}
   if(f.u>0){f.u-=dt;if((f.k-=dt)<=0){f.k=R(25,95);f.v=f.v>.8?R(.12,.55):1;if(f.v<.7){if(i<4)burst(2600,2,.03,.05,.003);if(BO===1)SFX.flkHit()}}if(f.u<=0){f.u=0;f.v=1}b.forEach(e=>e.style.opacity=f.v)}});
@@ -2020,7 +2037,7 @@ Object.assign(SFX,{
  fcClose:()=>{SFX.paper();later(()=>burst(200,1,.14,.2,.003,'lowpass'),160)}});
 HOV.fc=()=>burst(2400,.6,.16,.05,.05);
 const FCI={
- photo:d=>`<div class="im${d.src?'':' no'}" data-p="${fcEsc(d.src||'')}">${d.src?`<img alt="${fcEsc(fcT(d.caption))}" src="${fcEsc(d.src)}" draggable="false" onerror="this.parentNode.classList.add('no');this.remove()">`:''}</div><div class="cap">${fcEsc(fcT(d.caption))}</div>${d.detail?`<div class="fcdet"><div><p>${fcH(d.detail)}</p></div></div>`:''}`,
+ photo:d=>`<div class="im${d.src?'':' no'}" data-p="${fcEsc(d.src||'')}">${d.src?`<img decoding="async" loading="lazy" alt="${fcEsc(fcT(d.caption))}" src="${fcEsc(d.src)}" draggable="false" onerror="this.parentNode.classList.add('no');this.remove()">`:''}</div><div class="cap">${fcEsc(fcT(d.caption))}</div>${d.detail?`<div class="fcdet"><div><p>${fcH(d.detail)}</p></div></div>`:''}`,
  note:d=>`<span>${fcH(d.text)}</span>`,
  card:d=>`<div class="lb">${fcEsc(fcT(d.label))}</div><div class="tx">${fcH(d.text)}</div>`,
  report:d=>`<div class="fcsc"><p class="k">${d.kicker?fcEsc(fcT(d.kicker)):fcNo()}</p><h2>${fcEsc(fcT(d.title))}</h2>${d.sub?`<p class="sub">${fcEsc(fcT(d.sub))}</p>`:''}${(d.body||[]).map(s=>`<h4>${fcEsc(fcT(s.h))}</h4><p class="fctw" data-t="${fcEsc(fcT(s.t))}"><span></span><span></span></p>`).join('')}</div>`,
@@ -2605,7 +2622,7 @@ async function fcLoad(){
     fcMount();
   }
 }
-const fcCardHTML=()=>`<i class="fct">${fcNo()}</i><div class="fcph">${FC.cover?`<img alt="" src="${fcEsc(FC.cover)}" onerror="this.remove()">`:''}</div><h3>${fcEsc(fcT(FC.title))}</h3><small>${fcEsc(fcT(FC.type))}</small><b class="fcs">${fcEsc(fcT(FC.status||'SOLVED'))}</b>`;
+const fcCardHTML=()=>`<i class="fct">${fcNo()}</i><div class="fcph">${FC.cover?`<img decoding="async" loading="lazy" alt="" src="${fcEsc(FC.cover)}" onerror="this.remove()">`:''}</div><h3>${fcEsc(fcT(FC.title))}</h3><small>${fcEsc(fcT(FC.type))}</small><b class="fcs">${fcEsc(fcT(FC.status||'SOLVED'))}</b>`;
 function fcMount(){const b=FC.board||{};
  if(items.fc){items.fc.el.remove();delete items.fc}
  for(let i=LINKS.length-1;i>=0;i--)if(LINKS[i][1]==='fc')LINKS.splice(i,1);
@@ -2641,7 +2658,7 @@ layers:'<path d="M16 3l13 7-13 7-13-7z" fill="#2c4660"/><path d="M3 16l13 7 13-7
 ui:'<rect x="3" y="4" width="26" height="24" rx="3" fill="none" stroke="#a3171a" stroke-width="2.2"/><path d="M3 11h26M12 11v17" stroke="#a3171a" stroke-width="2.2"/>'};
 const LGA={javascript:'js',typescript:'ts','node.js':'node',nodejs:'node',python:'py','finance logic':'coin','responsive design':'device',responsive:'device',cms:'layers',figma:'figma'};
 function fcLogo(g){const k=String(g.logo||g.n||'').toLowerCase().trim(),id=LG[k]?k:LGA[k]||(LG[k=String(g.n||'').toLowerCase().trim()]?k:LGA[k]);
- if(g.logo&&!LG[g.logo]&&/[./]/.test(g.logo))return `<img alt="" draggable="false" src="${fcEsc(g.logo)}" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'${fcEsc((g.n||'?').slice(0,2))}'}))">`;
+ if(g.logo&&!LG[g.logo]&&/[./]/.test(g.logo))return `<img decoding="async" loading="lazy" alt="" draggable="false" src="${fcEsc(g.logo)}" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'${fcEsc((g.n||'?').slice(0,2))}'}))">`;
  if(id&&LG[id])return `<svg viewBox="0 0 32 32" aria-hidden="true">${LG[id]}</svg>`;
  return `<b>${fcEsc(String(g.n||'?').slice(0,2).toUpperCase())}</b>`}
 function fcKC(tags,n){const L=[16,38,22,46,28,40,20,32,26];return `<div class="kc"><i class="kr"></i>${(tags||[]).slice(0,n||9).map((g,i)=>`<b class="kt kl" style="--l:${L[i%9]}px;--r:${(i*53)%9-4}deg;--a:${2+i%3}deg;--s:${(3+i*.37).toFixed(2)}s;--dl:${(-i*.6).toFixed(1)}s"><em>${fcLogo(g)}</em><u>${fcEsc(g.n)}</u></b>`).join('')}</div>`}
@@ -2654,7 +2671,7 @@ function fcPage(i){const c=FC.cases[i],n=i+1,t=fcI,h=fcH,u=FC.ui;$('#fcn .nbb').
  const sp=[['type',c.kind],['role',c.role],['date',c.date],['status',u.fin]].map(s=>`<dt>${fU(s[0])}</dt><dd>${t(s[1])}</dd>`).join('');
  const li=a=>(a||[]).map(x=>`<li>${h(x)}</li>`).join('');
  $('#fcn .nbp').innerHTML=`<div class="pl"><div class="qs qa rv"><i class="qt"></i><div class="dart"></div><small class="qn1">${fU('case')} ${c.no}</small></div><div class="qs qk rv"><i class="qc"></i>${fcKC(c.tech)}<p class="hw">${h(c.note)}</p></div><div class="qs qi rv"><i class="qt"></i><dl class="meta">${sp}</dl></div><div class="qs qn rv"><h4 data-n="">${fU('notes')}</h4><ul class="tn">${li(c.tn)}</ul></div></div>
-<div class="pr"><header class="fhd rv"><p class="kick">${fU('case')} ${c.no} · ${fU('file')} FC-2026-${c.no}</p><h2>${t(c.title)}</h2><p class="hw">${t(c.sub)}</p><b class="fst">${fU('fin')}</b></header><p class="lead rv">${h(c.obj)}</p>${fcAcc(c)}<section class="rv"><h4 data-n="01">${fU('problem')}</h4><p>${h(c.problem)}</p></section><section class="rv"><h4 data-n="02">${fU('approach')}</h4><ol>${li(c.approach)}</ol></section><section class="rv"><h4 data-n="03">${fU('result')}</h4><p>${h(c.result)}</p><ul class="res" style="margin-top:8px">${li(c.res)}</ul></section><section class="rv"><h4 data-n="04">${fU('evidence')}</h4><div class="evg">${(c.ev||[]).slice(0,6).map((v,k)=>`<figure class="evf" tabindex="0" role="button" aria-label="${fcEsc(fcT(v.c))}" style="--r:${v.r||0}deg;--w:${v.w||'48%'};--y:${v.y||0}px;--ar:${v.ar||'4/3'}"><i class="tp"></i><div class="evi">${(MK[v.k]||MK.blocks)()}${v.src?`<img alt="${fcEsc(fcT(v.c))}" src="${fcEsc(v.src)}" onerror="this.remove()">`:''}</div><figcaption class="hw">${t(v.c)}</figcaption><u class="evn">EV-${n}${k+1}</u></figure>`).join('')}</div></section></div>`;
+<div class="pr"><header class="fhd rv"><p class="kick">${fU('case')} ${c.no} · ${fU('file')} FC-2026-${c.no}</p><h2>${t(c.title)}</h2><p class="hw">${t(c.sub)}</p><b class="fst">${fU('fin')}</b></header><p class="lead rv">${h(c.obj)}</p>${fcAcc(c)}<section class="rv"><h4 data-n="01">${fU('problem')}</h4><p>${h(c.problem)}</p></section><section class="rv"><h4 data-n="02">${fU('approach')}</h4><ol>${li(c.approach)}</ol></section><section class="rv"><h4 data-n="03">${fU('result')}</h4><p>${h(c.result)}</p><ul class="res" style="margin-top:8px">${li(c.res)}</ul></section><section class="rv"><h4 data-n="04">${fU('evidence')}</h4><div class="evg">${(c.ev||[]).slice(0,6).map((v,k)=>`<figure class="evf" tabindex="0" role="button" aria-label="${fcEsc(fcT(v.c))}" style="--r:${v.r||0}deg;--w:${v.w||'48%'};--y:${v.y||0}px;--ar:${v.ar||'4/3'}"><i class="tp"></i><div class="evi">${(MK[v.k]||MK.blocks)()}${v.src?`<img decoding="async" loading="lazy" alt="${fcEsc(fcT(v.c))}" src="${fcEsc(v.src)}" onerror="this.remove()">`:''}</div><figcaption class="hw">${t(v.c)}</figcaption><u class="evn">EV-${n}${k+1}</u></figure>`).join('')}</div></section></div>`;
  $('#fcn .nbcov').innerHTML=`<small>${fU('case')} ${c.no}</small><b>${t(c.title)}</b><em>${fU('fin')}</em><i></i>`;
  $('#fcn .nbt').innerHTML=`<button data-b="1">◂ ${fU('back')}</button>`+FC.cases.map((x,k)=>`<button data-i="${k}" class="${k==i?'cur':''}" aria-label="${fU('case')} ${x.no}">${x.no}</button>`).join('');$('#fcn .nbp').scrollTop=0}
 function fcRelang(){if(!FC||!items.fc)return;items.fc.el.innerHTML=fcCardHTML();items.fc.el.setAttribute('aria-label','Open solved case '+fcT(FC.title));if(fcOn){fcRow();if(fcInsp!=null)fcPage(fcInsp);fcThread(1)}}
@@ -3083,7 +3100,7 @@ try{key=sessionStorage.getItem(K)=='1'}catch(e){}
 const dw=document.createElement('div');dw.id='dwr';dw.className=key?'hk':'';
 dw.innerHTML='<div class="dw lk" role="button" tabindex="0" aria-label="Drawer (top)"></div><div class="dw" role="button" tabindex="0" aria-label="Drawer (bottom)"></div>';
 world.appendChild(dw);
-document.body.insertAdjacentHTML('beforeend','<div id="dwv" hidden role="dialog" aria-modal="true"><button class="dwx"></button><div class="dtray"><div class="dti"></div></div><div id="dwz" hidden tabindex="-1"><button class="zn zp" aria-label="Previous">‹</button><figure class="zf"><img alt=""><figcaption></figcaption></figure><button class="zn zn2" aria-label="Next">›</button></div></div><div id="dtoast"></div>');
+document.body.insertAdjacentHTML('beforeend','<div id="dwv" hidden role="dialog" aria-modal="true"><button class="dwx"></button><div class="dtray"><div class="dti"></div></div><div id="dwz" hidden tabindex="-1"><button class="zn zp" aria-label="Previous">‹</button><figure class="zf"><img decoding="async" loading="lazy" alt=""><figcaption></figcaption></figure><button class="zn zn2" aria-label="Next">›</button></div></div><div id="dtoast"></div>');
 const v=$('#dwv'),ti=v.querySelector('.dti'),z=$('#dwz');
 const say=s=>{const e=$('#dtoast');e.textContent=s;e.classList.add('on');clearTimeout(tm);tm=setTimeout(()=>e.classList.remove('on'),2400)};
 const snd=k=>{try{if(k=='slide')burst(220,.8,.45,.14,.03,'lowpass');else if(k=='lock'){tone(180,120,.12,.1,'square');later(()=>tone(150,100,.1,.08,'square'),110)}else{burst(2600,3,.05,.12,.002);later(()=>burst(1500,2,.08,.16,.003),160);later(()=>tone(700,400,.1,.08,'triangle'),200)}}catch(e){}};
@@ -3129,6 +3146,37 @@ window.dkKey=(c,k,el)=>{if(c.id!='c2'||k!=3||key)return;const b=document.createE
  b.appendChild(im);im.src='assets/key.png';
  ['pointerdown','pointerup'].forEach(n=>b.addEventListener(n,x=>x.stopPropagation()));
  b.onclick=e=>{e.stopPropagation();if(key)return;key=1;try{sessionStorage.setItem(K,'1')}catch(x){}dw.classList.add('hk');SFX.pick();b.classList.add('got');setTimeout(()=>b.remove(),700);say(t('you found a small key.','kamu menemukan kunci kecil.'))};el.appendChild(b)};
+})();
+</script>
+<style id="lq-css">
+/* paused when a full-screen layer covers the board, or when the element is off-screen */
+html.cov #world *,html.cov #world *::before,html.cov #world *::after,html.cov .lamfx *,html.cov #storm *,html.cov #fg *,.ofs,.ofs *{animation-play-state:paused!important}
+/* LOW quality: no backdrop/blur/drop-shadow, no decorative infinite loops (static pose kept) */
+html.lq *,html.lq *::before,html.lq *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+html.lq #kscene,html.lq #fg,html.lq #rain,html.lq #shaft,html.lq #stcast,html.lq .kring,html.lq .kt,html.lq .abk-t,html.lq .pn,html.lq .pnw,html.lq .lp,html.lq .fcpl,html.lq .fcpl i,html.lq .it{filter:none!important}
+html.lq .pn,html.lq .pnw,html.lq .lp{box-shadow:2px 4px 7px rgba(0,0,0,.5)}
+html.lq.focus .it:not(.sel),html.lq.focus .paper,html.lq.focus .crt,html.lq .focus .it:not(.sel),html.lq .focus .paper,html.lq .focus .crt{filter:none!important;opacity:.45}
+html.lq .kt,html.lq .abk-t,html.lq .kstage,html.lq #brn,html.lq .lamfx .gA,html.lq .lamfx .gB{animation:none!important}
+html.lq .lamfx .mote,html.lq #fcdust{display:none}
+html.lq .lamfx{mix-blend-mode:normal}
+html.lq #cw,html.lq #cw *,html.lq #cw *::before,html.lq #cw *::after{box-shadow:none!important}
+</style>
+<script id="lq-run">
+(function(){var d=document.documentElement;
+/* pause board animations while a full-screen layer (case book / terminal / evidence / solved file) covers it */
+var ids=['nb','term','evlb','fc'],els=ids.map(function(i){return document.getElementById(i)}).filter(Boolean);
+function cov(){d.classList.toggle('cov',els.some(function(e){return !e.hidden}))}
+if(window.MutationObserver){var mo=new MutationObserver(cov);els.forEach(function(e){mo.observe(e,{attributes:true,attributeFilter:['hidden']})})}cov();
+/* pause infinite loops of elements that are off-screen */
+if(window.IntersectionObserver){var io=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle('ofs',!e.isIntersecting)})},{rootMargin:'120px'});
+document.querySelectorAll('.abk-t,.lamfx').forEach(function(e){io.observe(e)})}
+/* auto-LOW: sustained average FPS < 40 (only in AUTO, only once the intro is gone, ignores hidden/covered/rotate windows) */
+var n=0,t0=0,bad=0,lt=0;
+(function m(t){requestAnimationFrame(m);
+ if(QL.pref!=='auto'||QL.on())return;
+ if(document.hidden||document.getElementById('intro')||d.classList.contains('rotlock')||d.classList.contains('cov')||t-lt>400){n=0;t0=0;lt=t;return}
+ lt=t;if(!t0){t0=t;n=0;return}n++;
+ if(t-t0>=3000){var f=n*1000/(t-t0);bad=f<40?bad+1:0;n=0;t0=t;if(bad>=2)QL.fps=1,QL.apply()}})(0);
 })();
 </script>
 </body></html>
